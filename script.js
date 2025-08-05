@@ -5,12 +5,14 @@ document.addEventListener('DOMContentLoaded', function() {
     initScrollAnimations();
     initLeaderboardTabs();
     initSmoothScrolling();
-    initLoadingScreen();
     initMobileMenu();
     initScrollToTop();
     initIntersectionObserver();
     initParallaxEffects();
     initEnhancedAnimations();
+    initLearnMoreButton();
+    initHeroAnimations(); // Add this back to fix text/logo visibility
+    initParticleAnimation(); // Add particle animation
     
     // Update leaderboards with animation
     setTimeout(() => {
@@ -112,6 +114,44 @@ function scrollToSection(sectionId) {
     }
 }
 
+// Learn More button functionality
+function initLearnMoreButton() {
+    // Handle button with ID (if exists)
+    const learnMoreBtn = document.getElementById('learn-more-btn');
+    if (learnMoreBtn) {
+        learnMoreBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Learn More button clicked'); // Debug log
+            scrollToSection('description');
+        });
+        console.log('Learn More button event listener added'); // Debug log
+    }
+    
+    // Handle button with class or onclick
+    const ctaButton = document.querySelector('.cta-button');
+    if (ctaButton && !ctaButton.onclick) {
+        ctaButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('CTA button clicked'); // Debug log
+            scrollToSection('description');
+        });
+        console.log('CTA button event listener added'); // Debug log
+    }
+    
+    // Make sure scrollToSection is globally available
+    window.scrollToSection = scrollToSection;
+    
+    // Add universal handler for scroll target buttons
+    document.addEventListener('click', function(e) {
+        const scrollTarget = e.target.getAttribute('data-scroll-target');
+        if (scrollTarget) {
+            e.preventDefault();
+            console.log('Scrolling to:', scrollTarget); // Debug log
+            scrollToSection(scrollTarget);
+        }
+    });
+}
+
 // Scroll animations
 function initScrollAnimations() {
     const observerOptions = {
@@ -122,43 +162,37 @@ function initScrollAnimations() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
+                entry.target.classList.add('animate');
                 
                 // Add staggered animation for cards
-                if (entry.target.classList.contains('instruction-card') || 
-                    entry.target.classList.contains('speaker-card') ||
-                    entry.target.classList.contains('task-item')) {
-                    const cards = entry.target.parentElement.children;
-                    Array.from(cards).forEach((card, index) => {
+                if (entry.target.classList.contains('instructions-grid') ||
+                    entry.target.classList.contains('speakers-grid') ||
+                    entry.target.classList.contains('highlights-timeline')) {
+                    const children = entry.target.children;
+                    Array.from(children).forEach((child, index) => {
                         setTimeout(() => {
-                            card.style.animation = `fadeInUp 0.6s ease forwards`;
-                        }, index * 100);
+                            child.classList.add('animate');
+                        }, index * 150);
                     });
                 }
             }
         });
     }, observerOptions);
 
-    // Observe all sections and cards
-    document.querySelectorAll('section, .instruction-card, .speaker-card, .timeline-item, .task-item').forEach(el => {
+    // Observe all elements with scroll-animate class
+    document.querySelectorAll('.scroll-animate').forEach(el => {
         observer.observe(el);
     });
 }
 
-// Loading screen
-function initLoadingScreen() {
-    const loading = document.createElement('div');
-    loading.className = 'loading';
-    loading.innerHTML = '<div class="spinner"></div>';
-    document.body.appendChild(loading);
-
-    window.addEventListener('load', () => {
+// Enhanced hero animations
+function initHeroAnimations() {
+    const animateElements = document.querySelectorAll('.animate-on-load');
+    
+    animateElements.forEach((element, index) => {
         setTimeout(() => {
-            loading.classList.add('hidden');
-            setTimeout(() => {
-                loading.remove();
-            }, 500);
-        }, 1000);
+            element.classList.add('loaded');
+        }, index * 200);
     });
 }
 
@@ -582,24 +616,6 @@ function initEnhancedAnimations() {
             button.style.overflow = 'hidden';
         });
     });
-
-    // Typewriter effect for hero title
-    const heroTitle = document.querySelector('.hero-title');
-    if (heroTitle) {
-        const text = heroTitle.textContent;
-        heroTitle.textContent = '';
-        let i = 0;
-        
-        const typeWriter = () => {
-            if (i < text.length) {
-                heroTitle.textContent += text.charAt(i);
-                i++;
-                setTimeout(typeWriter, 100);
-            }
-        };
-        
-        setTimeout(typeWriter, 1000);
-    }
 }
 
 // Smooth reveal animation for sections
@@ -617,28 +633,58 @@ function revealSection(sectionId) {
     }
 }
 
-// Enhanced loading screen
-function initLoadingScreen() {
-    const loadingScreen = document.createElement('div');
-    loadingScreen.className = 'loading-screen';
-    loadingScreen.innerHTML = `
-        <div class="loading-content">
-            <div class="loading-logo">AECO BOLTS 2025</div>
-            <div class="loading-spinner"></div>
-            <div class="loading-text">Loading amazing content<span class="loading-dots"></span></div>
-        </div>
+// Particle Animation System
+function initParticleAnimation() {
+    createParticleContainer();
+    setInterval(createParticle, 300);
+}
+
+function createParticleContainer() {
+    const container = document.createElement('div');
+    container.className = 'particle-container';
+    container.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    `;
+    document.body.appendChild(container);
+}
+
+function createParticle() {
+    const container = document.querySelector('.particle-container');
+    if (!container) return;
+
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    
+    const size = Math.random() * 4 + 2;
+    const startX = Math.random() * window.innerWidth;
+    const duration = Math.random() * 3000 + 2000;
+    
+    particle.style.cssText = `
+        position: absolute;
+        bottom: -10px;
+        left: ${startX}px;
+        width: ${size}px;
+        height: ${size}px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        pointer-events: none;
+        animation: floatUp ${duration}ms linear forwards;
     `;
     
-    document.body.appendChild(loadingScreen);
+    container.appendChild(particle);
     
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            loadingScreen.style.opacity = '0';
-            setTimeout(() => {
-                loadingScreen.remove();
-            }, 500);
-        }, 1500);
-    });
+    setTimeout(() => {
+        if (particle.parentNode) {
+            particle.parentNode.removeChild(particle);
+        }
+    }, duration);
 }
 
 // Initialize accessibility features
@@ -650,58 +696,7 @@ const accessibilityStyles = `
         outline: 2px solid #e74c3c;
         outline-offset: 2px;
     }
-    
-    .loading-screen {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, var(--golden-yellow), var(--sunset-orange));
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 10000;
-        transition: opacity 0.5s ease;
-    }
-    
-    .loading-content {
-        text-align: center;
-        color: white;
-    }
-    
-    .loading-logo {
-        font-size: 2.5rem;
-        font-weight: 800;
-        margin-bottom: 2rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-    
-    .loading-spinner {
-        width: 50px;
-        height: 50px;
-        border: 4px solid rgba(255,255,255,0.3);
-        border-top: 4px solid white;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin: 0 auto 2rem;
-    }
-    
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-    
-    .loading-text {
-        font-size: 1.2rem;
-        opacity: 0.9;
-    }
 `;
-
-// Inject styles
-const styleSheet = document.createElement('style');
-styleSheet.textContent = accessibilityStyles;
-document.head.appendChild(styleSheet);
 
 const accessibilityStyleSheet = document.createElement('style');
 accessibilityStyleSheet.textContent = accessibilityStyles;

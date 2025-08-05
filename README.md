@@ -21,15 +21,30 @@ A responsive, modern website built with vanilla HTML, CSS, and JavaScript for th
 - **Schedule**: Complete 3-day schedule of activities
 - **House Tasks**: Interactive task management with point system
 - **Leaderboards**: Real-time team and individual rankings
+- **Contact**: Secure contact form with privacy protection
 
 ### Interactive Features
 - Smooth scrolling navigation
 - Mobile hamburger menu
 - Tab-based leaderboard switching
 - Animated scroll-to-top button
-- Loading screen with spinner
 - Hover effects and animations
 - Real-time point updates simulation
+- **Secure contact form with validation**
+- **Privacy policy modal**
+- **Real-time input sanitization**
+
+### Security Features
+- **Content Security Policy (CSP)** headers
+- **XSS protection** with input sanitization
+- **Form validation** with real-time feedback
+- **Rate limiting** on form submissions
+- **Honeypot protection** against spam bots
+- **CSRF token generation** (client-side demo)
+- **Privacy policy compliance**
+- **Secure headers** (X-Frame-Options, X-Content-Type-Options)
+- **Error handling** and security monitoring
+- **Input length validation** and character limits
 
 ### Technical Features
 - Modern CSS Grid and Flexbox layouts
@@ -48,6 +63,38 @@ AECOBolts/
 ├── script.js           # JavaScript functionality
 └── README.md           # This file
 ```
+
+## 🔒 Security Features
+
+### Client-Side Security
+- **Content Security Policy (CSP)**: Prevents XSS attacks and code injection
+- **Input Sanitization**: All user inputs are sanitized to remove malicious content
+- **Form Validation**: Real-time validation with security checks
+- **Rate Limiting**: Prevents spam submissions (5 submissions per 5 minutes)
+- **Honeypot Protection**: Hidden fields to catch spam bots
+- **CSRF Protection**: Token-based protection (demo implementation)
+
+### Data Protection
+- **Privacy Policy**: Comprehensive privacy policy with user rights
+- **Secure Headers**: X-Frame-Options, X-XSS-Protection, X-Content-Type-Options
+- **Content Validation**: Blocks suspicious content and common spam patterns
+- **Error Handling**: Secure error handling without information disclosure
+- **Accessibility**: WCAG compliant with keyboard navigation support
+
+### Form Security Features
+- **Real-time Validation**: Immediate feedback on input validity
+- **Character Limits**: Enforced limits to prevent buffer overflow attempts
+- **Email Validation**: RFC-compliant email validation
+- **Phone Validation**: International phone number format validation
+- **Spam Detection**: Content analysis for spam keywords
+- **Secure Submission**: Encrypted data transmission ready
+
+### Implementation Notes
+- All security features are implemented client-side for demonstration
+- In production, server-side validation and security measures are essential
+- CSP headers should be configured at the server level
+- CSRF tokens should be generated server-side
+- Rate limiting should be implemented server-side with persistent storage
 
 ## 🎨 Design Elements
 
@@ -79,6 +126,8 @@ AECOBolts/
 3. **Mobile**: On mobile devices, tap the hamburger menu for navigation
 4. **Leaderboards**: Click the tabs to switch between team and individual rankings
 5. **Tasks**: Click on task items to mark them as completed (simulation)
+6. **Contact Form**: Use the secure contact form to send inquiries with built-in validation
+7. **Privacy**: Click the privacy policy link to view data protection information
 
 ## ✨ Key Features Breakdown
 
