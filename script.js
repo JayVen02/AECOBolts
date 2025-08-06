@@ -1,5 +1,11 @@
 // Enhanced DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize page loader
+    initPageLoader();
+    
+    // Initialize mobile optimizations first
+    initMobileOptimizations();
+    
     // Initialize all functionality
     initNavigation();
     initScrollAnimations();
@@ -11,14 +17,132 @@ document.addEventListener('DOMContentLoaded', function() {
     initParallaxEffects();
     initEnhancedAnimations();
     initLearnMoreButton();
-    initHeroAnimations(); // Add this back to fix text/logo visibility
-    initParticleAnimation(); // Add particle animation
+    initScrollIndicator();
+    initHeroAnimations();
+    initParticleAnimation();
+    initAdvancedScrollEffects();
+    initButtonEnhancements();
     
     // Update leaderboards with animation
     setTimeout(() => {
         updateLeaderboards();
     }, 1000);
 });
+
+// Page Loader
+function initPageLoader() {
+    // Create page loader if it doesn't exist
+    let loader = document.querySelector('.page-loader');
+    if (!loader) {
+        loader = document.createElement('div');
+        loader.className = 'page-loader';
+        loader.innerHTML = `
+            <div class="loader-content">
+                <div class="loader-spinner"></div>
+                <h3>Loading AECO BOLTS 2025...</h3>
+            </div>
+        `;
+        document.body.prepend(loader);
+    }
+    
+    // Hide loader after page loads
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            loader.classList.add('hidden');
+            document.body.classList.add('page-loaded');
+            setTimeout(() => {
+                loader.remove();
+            }, 500);
+        }, 1500);
+    });
+}
+
+// Advanced Scroll Effects
+function initAdvancedScrollEffects() {
+    const elements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right, .scale-in');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                }, Math.random() * 300);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+    
+    elements.forEach(el => observer.observe(el));
+}
+
+// Button Enhancements
+function initButtonEnhancements() {
+    // Add ripple effect to buttons
+    const buttons = document.querySelectorAll('.cta-button, .nav-link, .social-icon');
+    
+    buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+            
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+}
+
+// Mobile optimizations
+function initMobileOptimizations() {
+    // Ensure proper viewport meta tag
+    let viewportMeta = document.querySelector('meta[name="viewport"]');
+    if (!viewportMeta) {
+        viewportMeta = document.createElement('meta');
+        viewportMeta.name = 'viewport';
+        document.head.appendChild(viewportMeta);
+    }
+    viewportMeta.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
+
+    // Detect mobile device
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile) {
+        document.body.classList.add('mobile-device');
+    }
+
+    // Handle orientation change
+    window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+            window.scrollTo(0, 1);
+        }, 500);
+    });
+
+    // Optimize touch scrolling for mobile
+    if (isMobile) {
+        document.body.style.webkitOverflowScrolling = 'touch';
+        document.body.style.overflowScrolling = 'touch';
+    }
+
+    // Prevent double-tap zoom on buttons
+    document.addEventListener('touchend', (e) => {
+        const clickedElement = e.target;
+        if (clickedElement.matches('button, .cta-button, .nav-link, .nav-toggle')) {
+            e.preventDefault();
+            clickedElement.click();
+        }
+    });
+}
 
 // Enhanced Navigation functionality
 function initNavigation() {
@@ -60,21 +184,76 @@ function initNavigation() {
     });
 }
 
-// Mobile menu functionality
+// Enhanced Mobile menu functionality
 function initMobileMenu() {
     const mobileMenu = document.getElementById('mobile-menu');
     const navMenu = document.getElementById('nav-menu');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    if (!mobileMenu || !navMenu) return;
 
-    mobileMenu.addEventListener('click', () => {
+    // Toggle mobile menu
+    mobileMenu.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
         mobileMenu.classList.toggle('active');
         navMenu.classList.toggle('active');
+        
+        // Prevent body scroll when menu is open
+        if (navMenu.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
     });
 
-    // Close mobile menu when clicking on a link
-    document.querySelectorAll('.nav-link').forEach(link => {
+    // Close menu when clicking on nav links
+    navLinks.forEach(link => {
         link.addEventListener('click', () => {
             mobileMenu.classList.remove('active');
             navMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!navMenu.contains(e.target) && !mobileMenu.contains(e.target)) {
+            mobileMenu.classList.remove('active');
+            navMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Close menu on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+            mobileMenu.classList.remove('active');
+            navMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            mobileMenu.classList.remove('active');
+            navMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Enhanced touch feedback for mobile buttons
+    [mobileMenu, ...navLinks].forEach(element => {
+        element.addEventListener('touchstart', () => {
+            element.style.transform = 'scale(0.95)';
+        });
+        
+        element.addEventListener('touchend', () => {
+            setTimeout(() => {
+                element.style.transform = '';
+            }, 150);
         });
     });
 }
@@ -99,7 +278,6 @@ function initSmoothScrolling() {
     });
 }
 
-// Scroll to section function
 function scrollToSection(sectionId) {
     const target = document.getElementById(sectionId);
     if (target) {
@@ -114,42 +292,62 @@ function scrollToSection(sectionId) {
     }
 }
 
-// Learn More button functionality
 function initLearnMoreButton() {
-    // Handle button with ID (if exists)
     const learnMoreBtn = document.getElementById('learn-more-btn');
     if (learnMoreBtn) {
         learnMoreBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            console.log('Learn More button clicked'); // Debug log
+            // console.log('Learn More button clicked'); 
             scrollToSection('description');
         });
-        console.log('Learn More button event listener added'); // Debug log
+        console.log('Learn More button event listener added');
     }
     
-    // Handle button with class or onclick
     const ctaButton = document.querySelector('.cta-button');
     if (ctaButton && !ctaButton.onclick) {
         ctaButton.addEventListener('click', function(e) {
             e.preventDefault();
-            console.log('CTA button clicked'); // Debug log
+            // console.log('CTA button clicked'); 
             scrollToSection('description');
         });
-        console.log('CTA button event listener added'); // Debug log
+        // console.log('CTA button event listener added');
     }
     
-    // Make sure scrollToSection is globally available
     window.scrollToSection = scrollToSection;
     
-    // Add universal handler for scroll target buttons
     document.addEventListener('click', function(e) {
         const scrollTarget = e.target.getAttribute('data-scroll-target');
         if (scrollTarget) {
             e.preventDefault();
-            console.log('Scrolling to:', scrollTarget); // Debug log
+            // console.log('Scrolling to:', scrollTarget); 
             scrollToSection(scrollTarget);
         }
     });
+}
+
+function initScrollIndicator() {
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    const scrollArrow = document.querySelector('.scroll-arrow');
+    
+    if (scrollIndicator) {
+        scrollIndicator.addEventListener('click', function(e) {
+            e.preventDefault();
+            scrollToSection('description');
+        });
+        
+        // Make it cursor pointer to indicate it's clickable
+        scrollIndicator.style.cursor = 'pointer';
+    }
+    
+    if (scrollArrow) {
+        scrollArrow.addEventListener('click', function(e) {
+            e.preventDefault();
+            scrollToSection('description');
+        });
+        
+        // Make it cursor pointer to indicate it's clickable
+        scrollArrow.style.cursor = 'pointer';
+    }
 }
 
 // Scroll animations
@@ -505,12 +703,10 @@ function throttle(func, wait) {
 
 // Apply throttling to scroll events
 const throttledScrollHandler = throttle(() => {
-    // Your scroll handling code here
-}, 16); // ~60fps
+}, 16); 
 
 window.addEventListener('scroll', throttledScrollHandler);
 
-// Error handling for images
 document.addEventListener('DOMContentLoaded', () => {
     const images = document.querySelectorAll('img');
     images.forEach(img => {
@@ -546,7 +742,6 @@ function initAccessibility() {
     });
 }
 
-// Enhanced Intersection Observer for scroll animations
 function initIntersectionObserver() {
     const observerOptions = {
         threshold: 0.1,
@@ -562,7 +757,6 @@ function initIntersectionObserver() {
         });
     }, observerOptions);
 
-    // Observe elements that should animate on scroll
     const animateElements = document.querySelectorAll(
         '.instruction-card, .speaker-card, .timeline-item, .leaderboard-row, .bring-category'
     );
@@ -574,7 +768,6 @@ function initIntersectionObserver() {
     });
 }
 
-// Parallax effects
 function initParallaxEffects() {
     window.addEventListener('scroll', () => {
         const scrolled = window.pageYOffset;
@@ -609,7 +802,6 @@ function initEnhancedAnimations() {
         });
     });
 
-    // Add shimmer effect to buttons
     const buttons = document.querySelectorAll('.cta-button');
     buttons.forEach(button => {
         button.addEventListener('mouseenter', () => {
@@ -618,7 +810,6 @@ function initEnhancedAnimations() {
     });
 }
 
-// Smooth reveal animation for sections
 function revealSection(sectionId) {
     const section = document.getElementById(sectionId);
     if (section) {
