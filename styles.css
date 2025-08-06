@@ -1376,11 +1376,24 @@ body.page-loaded .scroll-animate {
 }
 
 .speaker-image {
-    height: 200px;
+    height: 250px;
     background: linear-gradient(45deg, var(--sky-blue), var(--mountain-purple));
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    border-radius: 15px 15px 0 0;
+}
+
+.speaker-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.speaker-photo:hover {
+    transform: scale(1.05);
 }
 
 .speaker-placeholder {
