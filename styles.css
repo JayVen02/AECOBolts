@@ -1376,7 +1376,7 @@ body.page-loaded .scroll-animate {
 }
 
 .speaker-image {
-    height: 250px;
+    height: 350px;
     background: linear-gradient(45deg, var(--sky-blue), var(--mountain-purple));
     display: flex;
     align-items: center;
@@ -2066,6 +2066,41 @@ body.page-loaded .scroll-animate {
 
     .speakers-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* Minimize speaker modules for mobile */
+    .speaker-card {
+        margin-bottom: 1.5rem;
+    }
+
+    .speaker-image {
+        height: 250px;
+    }
+
+    .speaker-info {
+        padding: 1.2rem;
+    }
+
+    .speaker-info h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+    }
+
+    .speaker-position {
+        font-size: 0.9rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .speaker-topic {
+        font-size: 0.85rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .speaker-bio {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        display: none; /* Hide bio on mobile to save space */
     }
 
     .schedule-container {
