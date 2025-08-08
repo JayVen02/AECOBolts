@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize all functionality
     initNavigation();
     initScrollAnimations();
+    initCarousel();
     initLeaderboardTabs();
     initSmoothScrolling();
     initMobileMenu();
@@ -365,7 +366,7 @@ function initScrollAnimations() {
                 // Add staggered animation for cards
                 if (entry.target.classList.contains('instructions-grid') ||
                     entry.target.classList.contains('speakers-grid') ||
-                    entry.target.classList.contains('highlights-timeline')) {
+                    entry.target.classList.contains('photo-carousel')) {
                     const children = entry.target.children;
                     Array.from(children).forEach((child, index) => {
                         setTimeout(() => {
@@ -380,6 +381,117 @@ function initScrollAnimations() {
     // Observe all elements with scroll-animate class
     document.querySelectorAll('.scroll-animate').forEach(el => {
         observer.observe(el);
+    });
+}
+
+// Photo Carousel functionality
+function initCarousel() {
+    const carousels = document.querySelectorAll('.carousel-container');
+    
+    carousels.forEach((carousel, carouselIndex) => {
+        const track = carousel.querySelector('.carousel-track');
+        const slides = carousel.querySelectorAll('.carousel-slide');
+        const prevBtn = carousel.querySelector('.prev-btn');
+        const nextBtn = carousel.querySelector('.next-btn');
+        const indicators = carousel.querySelectorAll('.indicator');
+        
+        if (!track || !slides.length) return;
+        
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+        
+        // Function to update carousel position
+        function updateCarousel() {
+            const slideWidth = slides[0].offsetWidth;
+            track.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+            
+            // Update active slide
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentSlide);
+            });
+            
+            // Update indicators
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentSlide);
+            });
+        }
+        
+        // Next slide function
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+        
+        // Previous slide function
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+        
+        // Event listeners
+        if (nextBtn) {
+            nextBtn.addEventListener('click', nextSlide);
+        }
+        
+        if (prevBtn) {
+            prevBtn.addEventListener('click', prevSlide);
+        }
+        
+        // Indicator click events
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                currentSlide = index;
+                updateCarousel();
+            });
+        });
+        
+        // Auto-play carousel (optional)
+        let autoPlayInterval = setInterval(nextSlide, 5000);
+        
+        // Pause auto-play on hover
+        if (carousel) {
+            carousel.addEventListener('mouseenter', () => {
+                clearInterval(autoPlayInterval);
+            });
+            
+            carousel.addEventListener('mouseleave', () => {
+                autoPlayInterval = setInterval(nextSlide, 5000);
+            });
+        }
+        
+        // Touch/swipe support for mobile
+        let startX = 0;
+        let endX = 0;
+        
+        if (carousel) {
+            carousel.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            });
+            
+            carousel.addEventListener('touchend', (e) => {
+                endX = e.changedTouches[0].clientX;
+                handleSwipe();
+            });
+        }
+        
+        function handleSwipe() {
+            const threshold = 50;
+            const diff = startX - endX;
+            
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', updateCarousel);
+        
+        // Initialize carousel
+        updateCarousel();
     });
 }
 
@@ -878,10 +990,8 @@ function createParticle() {
     }, duration);
 }
 
-// Initialize accessibility features
 document.addEventListener('DOMContentLoaded', initAccessibility);
 
-// Add focus styles for keyboard navigation
 const accessibilityStyles = `
     .keyboard-navigation *:focus {
         outline: 2px solid #e74c3c;
