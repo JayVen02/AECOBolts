@@ -1261,6 +1261,37 @@ body.page-loaded .scroll-animate {
     color: rgba(255, 255, 255, 0.8);
 }
 
+.speakers-intro .speaker-materials {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.speakers-intro .pdf-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(45deg, var(--golden-yellow), var(--sunset-orange));
+    color: white;
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 183, 77, 0.3);
+}
+
+.speakers-intro .pdf-download:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 183, 77, 0.4);
+    background: linear-gradient(45deg, var(--sunset-orange), var(--golden-yellow));
+}
+
+.speakers-intro .pdf-download i {
+    font-size: 1rem;
+}
+
 /* Highlights Section */
 .highlights {
     padding: 80px 0;
