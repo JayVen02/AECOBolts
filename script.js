@@ -200,19 +200,34 @@ function initNavigation() {
             const targetSection = document.querySelector(targetId);
             
             if (targetSection) {
-                const offsetTop = targetSection.offsetTop - 80; // Account for navbar height
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
-
-                // Close mobile menu if open
+                // Close mobile menu if open immediately
                 const navMenu = document.getElementById('nav-menu');
                 const mobileMenu = document.getElementById('mobile-menu');
                 if (navMenu && navMenu.classList.contains('active')) {
                     navMenu.classList.remove('active');
                     mobileMenu.classList.remove('active');
+                    
+                    // Reset body styles
+                    const scrollY = document.body.style.top;
+                    document.body.style.overflow = '';
+                    document.body.style.position = '';
+                    document.body.style.width = '';
+                    document.body.style.top = '';
+                    
+                    // Restore scroll position
+                    if (scrollY) {
+                        window.scrollTo(0, parseInt(scrollY) * -1);
+                    }
                 }
+                
+                // Small delay to ensure menu closes before scrolling
+                setTimeout(() => {
+                    const offsetTop = targetSection.offsetTop - 80; // Account for navbar height
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }, 100);
 
                 // Add ripple effect
                 addRippleEffect(link, e);
@@ -272,7 +287,6 @@ function initMobileMenu() {
     if (!mobileMenu || !navMenu) return;
 
     // Add touch support variables
-    let isMenuOpen = false;
     let touchStartY = 0;
     let touchStartX = 0;
 
@@ -284,13 +298,16 @@ function initMobileMenu() {
         toggleMobileMenu();
     });
 
-    function toggleMobileMenu() {
-        isMenuOpen = !isMenuOpen;
+    // Make toggleMobileMenu globally accessible
+    window.toggleMobileMenu = function() {
+        const isMenuOpen = navMenu.classList.contains('active');
+        
         mobileMenu.classList.toggle('active');
         navMenu.classList.toggle('active');
         
         // Prevent body scroll when menu is open with better positioning
-        if (isMenuOpen) {
+        if (!isMenuOpen) {
+            // Opening menu
             document.body.style.overflow = 'hidden';
             document.body.style.position = 'fixed';
             document.body.style.width = '100%';
@@ -307,6 +324,7 @@ function initMobileMenu() {
                 }, index * 100 + 200);
             });
         } else {
+            // Closing menu
             const scrollY = document.body.style.top;
             document.body.style.overflow = '';
             document.body.style.position = '';
@@ -321,7 +339,7 @@ function initMobileMenu() {
                 link.style.transform = '';
             });
         }
-    }
+    };
 
     // Enhanced touch handling for swipe gestures
     navMenu.addEventListener('touchstart', (e) => {
@@ -330,6 +348,7 @@ function initMobileMenu() {
     }, { passive: true });
 
     navMenu.addEventListener('touchmove', (e) => {
+        const isMenuOpen = navMenu.classList.contains('active');
         if (!isMenuOpen) return;
         
         const touchY = e.touches[0].clientY;
@@ -339,38 +358,25 @@ function initMobileMenu() {
         
         // Close menu on swipe right (for right-side menu)
         if (deltaX > 50 && Math.abs(deltaY) < 100) {
-            toggleMobileMenu();
+            window.toggleMobileMenu();
         }
     }, { passive: true });
 
-    // Close menu when clicking on nav links with better UX
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            // Add visual feedback
-            link.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                link.style.transform = '';
-            }, 150);
-            
-            setTimeout(() => {
-                if (isMenuOpen) {
-                    toggleMobileMenu();
-                }
-            }, 200);
-        });
-    });
+    // Note: Nav link click handling is done in initNavigation() to avoid duplicate event listeners
 
     // Close menu when clicking outside with improved detection
     document.addEventListener('click', (e) => {
+        const isMenuOpen = navMenu.classList.contains('active');
         if (isMenuOpen && !navMenu.contains(e.target) && !mobileMenu.contains(e.target)) {
-            toggleMobileMenu();
+            window.toggleMobileMenu();
         }
     });
 
     // Close menu on escape key
     document.addEventListener('keydown', (e) => {
+        const isMenuOpen = navMenu.classList.contains('active');
         if (e.key === 'Escape' && isMenuOpen) {
-            toggleMobileMenu();
+            window.toggleMobileMenu();
         }
     });
 
@@ -379,14 +385,16 @@ function initMobileMenu() {
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
+            const isMenuOpen = navMenu.classList.contains('active');
             if (window.innerWidth > 768 && isMenuOpen) {
-                toggleMobileMenu();
+                window.toggleMobileMenu();
             }
         }, 100);
     });
 
     // Add focus trap for accessibility
     function trapFocus(e) {
+        const isMenuOpen = navMenu.classList.contains('active');
         if (!isMenuOpen) return;
         
         const focusableElements = navMenu.querySelectorAll(
