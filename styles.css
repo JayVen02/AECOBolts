@@ -2013,6 +2013,101 @@ body.page-loaded .scroll-animate {
     }
 }
 
+/* Team Color Classes for Leaderboard */
+.team-blue {
+    background: linear-gradient(135deg, #3498db, #2980b9) !important;
+    color: white;
+}
+
+.team-purple {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad) !important;
+    color: white;
+}
+
+.team-gray {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d) !important;
+    color: white;
+}
+
+.team-orange {
+    background: linear-gradient(135deg, #f39c12, #e67e22) !important;
+    color: white;
+}
+
+.team-white {
+    background: linear-gradient(135deg, #ecf0f1, #bdc3c7) !important;
+    color: #2c3e50;
+}
+
+.team-yellow {
+    background: linear-gradient(135deg, #f1c40f, #f39c12) !important;
+    color: #2c3e50;
+}
+
+.team-green {
+    background: linear-gradient(135deg, #2ecc71, #27ae60) !important;
+    color: white;
+}
+
+.team-red {
+    background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+    color: white;
+}
+
+.team-pink {
+    background: linear-gradient(135deg, #e91e63, #ad1457) !important;
+    color: white;
+}
+
+/* Ensure the team colors override the gold, silver, bronze styles */
+.leaderboard-row.team-blue,
+.leaderboard-row.team-purple,
+.leaderboard-row.team-gray,
+.leaderboard-row.team-orange,
+.leaderboard-row.team-white,
+.leaderboard-row.team-yellow,
+.leaderboard-row.team-green,
+.leaderboard-row.team-red,
+.leaderboard-row.team-pink {
+    border-left: 6px solid transparent;
+}
+
+.leaderboard-row.team-blue {
+    border-left-color: #2980b9;
+}
+
+.leaderboard-row.team-purple {
+    border-left-color: #8e44ad;
+}
+
+.leaderboard-row.team-gray {
+    border-left-color: #7f8c8d;
+}
+
+.leaderboard-row.team-orange {
+    border-left-color: #e67e22;
+}
+
+.leaderboard-row.team-white {
+    border-left-color: #bdc3c7;
+}
+
+.leaderboard-row.team-yellow {
+    border-left-color: #f39c12;
+}
+
+.leaderboard-row.team-green {
+    border-left-color: #27ae60;
+}
+
+.leaderboard-row.team-red {
+    border-left-color: #c0392b;
+}
+
+.leaderboard-row.team-pink {
+    border-left-color: #ad1457;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-menu {
