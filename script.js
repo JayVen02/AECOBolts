@@ -479,8 +479,7 @@ function initLearnMoreButton() {
     const learnMoreBtn = document.getElementById('learn-more-btn');
     if (learnMoreBtn) {
         learnMoreBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            // console.log('Learn More button clicked'); 
+            e.preventDefault(); 
             scrollToSection('description');
         });
         console.log('Learn More button event listener added');
@@ -490,10 +489,8 @@ function initLearnMoreButton() {
     if (ctaButton && !ctaButton.onclick) {
         ctaButton.addEventListener('click', function(e) {
             e.preventDefault();
-            // console.log('CTA button clicked'); 
             scrollToSection('description');
         });
-        // console.log('CTA button event listener added');
     }
     
     window.scrollToSection = scrollToSection;
@@ -876,7 +873,6 @@ function createParticle(container) {
     });
 }
 
-// Task completion simulation
 function initTaskCompletion() {
     const taskItems = document.querySelectorAll('.task-item');
     
