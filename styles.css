@@ -2307,7 +2307,7 @@ body.page-loaded .scroll-animate {
     }
     
     .nav-container {
-        /* height: 70px; */
+        height: 70px;
         padding: 0 15px;
     }
     
