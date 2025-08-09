@@ -25,10 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
     initAdvancedScrollEffects();
     initButtonEnhancements();
     
-    // Update leaderboards with animation
-    setTimeout(() => {
-        updateLeaderboards();
-    }, 1000);
+    // Update leaderboards with animation (DISABLED - scores should remain static)
+    // setTimeout(() => {
+    //     updateLeaderboards();
+    // }, 1000);
 });
 
 // Page Loader
@@ -732,8 +732,12 @@ function showLeaderboard(boardType) {
     }
 }
 
-// Update leaderboards with real-time effect
+// Update leaderboards with real-time effect (DISABLED - keeping static scores)
 function updateLeaderboards() {
+    // Function disabled to prevent random score changes
+    // Scores should remain as defined in HTML
+    return;
+    
     const teamRows = document.querySelectorAll('#teams-leaderboard .leaderboard-row');
     const individualRows = document.querySelectorAll('#individuals-leaderboard .leaderboard-row');
     
