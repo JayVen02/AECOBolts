@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AECO BOLTS 2025 - Bahay ni KuyAECO. A 3-day and 2-night leadership formation bootcamp for Atenean student leaders at Xavier University - Ateneo de Cagayan.">
     
     <title>AECOBolts - Buhay ni KuyAECO</title>
     
@@ -12,6 +13,14 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous">
 </head>
 <body>
+    <!-- Page Loader -->
+    <div class="page-loader" id="page-loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <h3>Loading AECO BOLTS 2025...</h3>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
@@ -39,7 +48,17 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-container">
-            <!-- Hero content removed - moved to about section -->
+            <div class="hero-content animate-on-load">
+                <h1 class="hero-title">AECO BOLTS 2025</h1>
+                <h2 class="hero-subtitle">Bahay ni KuyAECO</h2>
+                <p class="hero-description">Basic Orientation and Leadership Training Seminar. A 3-day and 2-night leadership bootcamp empowering Atenean student leaders through comprehensive formation and real-world application.</p>
+                <button class="cta-button" id="learn-more-btn">Learn More <i class="fas fa-arrow-right"></i></button>
+            </div>
+            <div class="hero-image animate-on-load">
+                <div class="hero-placeholder">
+                    <img src="https://res.cloudinary.com/dvblizd3z/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1754409922/AECO/AECO_hnlnqd.jpg" alt="AECO Logo" class="hero-logo">
+                </div>
+            </div>
             <div class="scroll-indicator">
                 <div class="scroll-arrow">
                     <i class="fas fa-chevron-down"></i>
@@ -52,9 +71,7 @@
     <section id="description" class="description scroll-animate">
         <div class="container">
             <div class="description-content scroll-animate">
-            <div class="hero-content-section">
-                <h1 class="main-title">AECO BOLTS 2025</h1>
-                <h2 class="main-subtitle">Bahay ni KuyAECO</h2>
+                <h2 class="section-title scroll-animate">About AECO BOLTS 2025</h2>
                 <p>This is a 3 day and 2 night leadership bootcamp made for AECO members and its partner student organizations. This program helps student leaders grow, starting from self-leadership to leading others, so they are ready to face real-life challenges with skills, kindness, and good values.</p>
                 <p>The event includes learning sessions and hands-on leadership practice. It is inspired by Filipino community life and the format of Pinoy Big Brother. During the camp, the venue is set up like a "house" where the students, called housemates, need to think, work together, and face different challenges as one team.</p>
                 <p>Through BOLTS 2025, AECO continues its mission to build strong and caring leaders. It gives student leaders a space to reflect on themselves, learn servant leadership, and create meaningful connections, just like housemates walking together in one journey of growth.</p>
@@ -69,7 +86,6 @@
                     </ul>
                 </div>
             </div>
-        </div>
         </div>
     </section>
 

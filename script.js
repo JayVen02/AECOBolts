@@ -1,10 +1,16 @@
-// Enhanced DOM Content Loaded
+// Consolidate DOMContentLoaded initialization
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize page loader
+    // Initialize page loader immediately
     initPageLoader();
     
     // Initialize mobile optimizations first
     initMobileOptimizations();
+    
+    // Initialize accessibility features
+    initAccessibility();
+    
+    // Initialize image error fallbacks
+    initImageFallbacks();
     
     // Initialize all functionality
     initNavigation();
@@ -24,39 +30,33 @@ document.addEventListener('DOMContentLoaded', function() {
     initParticleAnimation();
     initAdvancedScrollEffects();
     initButtonEnhancements();
+    initSpeakerInteractions();
+    initTimelineAnimations();
     
-    // Update leaderboards with animation (DISABLED - scores should remain static)
-    // setTimeout(() => {
-    //     updateLeaderboards();
-    // }, 1000);
+    // Delay task completion initialization slightly
+    setTimeout(initTaskCompletion, 1000);
 });
 
 // Page Loader
 function initPageLoader() {
-    // Create page loader if it doesn't exist
-    let loader = document.querySelector('.page-loader');
-    if (!loader) {
-        loader = document.createElement('div');
-        loader.className = 'page-loader';
-        loader.innerHTML = `
-            <div class="loader-content">
-                <div class="loader-spinner"></div>
-                <h3>Loading AECO BOLTS 2025...</h3>
-            </div>
-        `;
-        document.body.prepend(loader);
-    }
+    const loader = document.querySelector('.page-loader');
+    if (!loader) return;
     
-    // Hide loader after page loads
-    window.addEventListener('load', () => {
+    const hideLoader = () => {
         setTimeout(() => {
             loader.classList.add('hidden');
             document.body.classList.add('page-loaded');
             setTimeout(() => {
                 loader.remove();
             }, 500);
-        }, 1500);
-    });
+        }, 300); // Optimized delay (300ms) for better user experience
+    };
+
+    if (document.readyState === 'complete') {
+        hideLoader();
+    } else {
+        window.addEventListener('load', hideLoader);
+    }
 }
 
 // Advanced Scroll Effects
@@ -832,46 +832,7 @@ function initScrollToTop() {
     });
 }
 
-// Particle animation for hero section
-function initParticleAnimation() {
-    const hero = document.querySelector('.hero');
-    const particleCount = 50;
-    
-    for (let i = 0; i < particleCount; i++) {
-        createParticle(hero);
-    }
-}
-
-function createParticle(container) {
-    const particle = document.createElement('div');
-    particle.style.cssText = `
-        position: absolute;
-        width: 4px;
-        height: 4px;
-        background: rgba(255, 255, 255, 0.7);
-        border-radius: 50%;
-        pointer-events: none;
-    `;
-    
-    const x = Math.random() * container.offsetWidth;
-    const y = Math.random() * container.offsetHeight;
-    const duration = Math.random() * 3 + 2;
-    
-    particle.style.left = x + 'px';
-    particle.style.top = y + 'px';
-    
-    container.appendChild(particle);
-    
-    // Animate particle
-    particle.animate([
-        { transform: 'translateY(0px)', opacity: 1 },
-        { transform: 'translateY(-100px)', opacity: 0 }
-    ], {
-        duration: duration * 1000,
-        iterations: Infinity,
-        easing: 'linear'
-    });
-}
+// First particle animation implementation removed (using dynamic Particle System instead)
 
 function initTaskCompletion() {
     const taskItems = document.querySelectorAll('.task-item');
@@ -907,10 +868,7 @@ function initTaskCompletion() {
     });
 }
 
-// Initialize task completion after DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(initTaskCompletion, 1500);
-});
+// Task completion helper initialized in main DOMContentLoaded listener
 
 // Speaker card interactions
 function initSpeakerInteractions() {
@@ -973,14 +931,7 @@ const styleSheet = document.createElement('style');
 styleSheet.textContent = timelineStyles;
 document.head.appendChild(styleSheet);
 
-// Initialize all additional features
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        initParticleAnimation();
-        initSpeakerInteractions();
-        initTimelineAnimations();
-    }, 2000);
-});
+// Additional features initialized in main DOMContentLoaded listener
 
 // Performance optimization - Throttle scroll events
 function throttle(func, wait) {
@@ -1001,14 +952,15 @@ const throttledScrollHandler = throttle(() => {
 
 window.addEventListener('scroll', throttledScrollHandler);
 
-document.addEventListener('DOMContentLoaded', () => {
+// Image fallback helper
+function initImageFallbacks() {
     const images = document.querySelectorAll('img');
     images.forEach(img => {
         img.addEventListener('error', function() {
             this.style.display = 'none';
         });
     });
-});
+}
 
 // Accessibility improvements
 function initAccessibility() {
@@ -1172,7 +1124,7 @@ function createParticle() {
     }, duration);
 }
 
-document.addEventListener('DOMContentLoaded', initAccessibility);
+// Accessibility helper initialized in main DOMContentLoaded listener
 
 const accessibilityStyles = `
     .keyboard-navigation *:focus {
